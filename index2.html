@@ -1,0 +1,461 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Taiwan Family Trip</title>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500;12..96,700&family=Figtree:wght@400;500;600;700&display=swap">
+<style>
+:root{color-scheme:light}
+@media (prefers-color-scheme: dark){:root{color-scheme:dark}}
+
+/* Layout: phone-first app, 5 bottom tabs, one column up to 720px.
+   Colour: cool paper ground, deep teal ink; Kaohsiung amber, Taipei blue, travel violet. */
+:root{
+  --bg:#F1F5F4; --surface:#FFFFFF; --ink:#15302E; --muted:#58706D; --line:#D6E2DF;
+  --accent:#0E7C7B; --accent-ink:#FFFFFF;
+  --khh:#9A5B00; --khh-bg:#FBEBD2; --tpe:#245A9E; --tpe-bg:#DCE8F8; --trv:#5B3FA3; --trv-bg:#E8E0F6;
+  --good:#2E7D4F; --good-bg:#DDF0E4; --warn:#8A5200; --warn-bg:#FFEBC2; --bad:#B3261E; --bad-bg:#FBDDD9;
+  --display:"Bricolage Grotesque","Avenir Next",system-ui,sans-serif; --body:"Figtree",system-ui,-apple-system,"Segoe UI",sans-serif;
+}
+@media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
+  --bg:#0E1B1A; --surface:#162624; --ink:#E4EFED; --muted:#93AAA6; --line:#2A403D;
+  --accent:#4FC1BE; --accent-ink:#06211F;
+  --khh:#F0B35B; --khh-bg:#3A2A10; --tpe:#8DB4F0; --tpe-bg:#162A47; --trv:#B9A2F0; --trv-bg:#2A2047;
+  --good:#6FCB93; --good-bg:#12301F; --warn:#F2C262; --warn-bg:#3A2D0B; --bad:#F2928B; --bad-bg:#3E1714; color-scheme:dark}}
+:root[data-theme="dark"]{
+  --bg:#0E1B1A; --surface:#162624; --ink:#E4EFED; --muted:#93AAA6; --line:#2A403D;
+  --accent:#4FC1BE; --accent-ink:#06211F;
+  --khh:#F0B35B; --khh-bg:#3A2A10; --tpe:#8DB4F0; --tpe-bg:#162A47; --trv:#B9A2F0; --trv-bg:#2A2047;
+  --good:#6FCB93; --good-bg:#12301F; --warn:#F2C262; --warn-bg:#3A2D0B; --bad:#F2928B; --bad-bg:#3E1714; color-scheme:dark}
+*{box-sizing:border-box}
+html,body{min-height:100%}
+body{margin:0;background:var(--bg);color:var(--ink);font:15px/1.5 var(--body);
+  padding-top:calc(14px + env(safe-area-inset-top,0px));padding-bottom:100px;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.wrap{max-width:720px;margin:0 auto;display:flex;flex-direction:column;gap:18px}
+h1,h2,h3{font-family:var(--display);margin:0;line-height:1.15;text-wrap:balance}
+h1{font-size:28px;font-weight:700}
+h2{font-size:19px;font-weight:700}
+h3{font-size:17px;font-weight:700}
+p{margin:0}
+.eyebrow{font-size:12px;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);font-weight:600}
+.muted{color:var(--muted)}
+.small{font-size:13px}
+.num{font-variant-numeric:tabular-nums}
+a{color:var(--accent)}
+:focus-visible{outline:2px solid var(--accent);outline-offset:2px;border-radius:6px}
+header.top{display:flex;flex-direction:column;gap:6px}
+.sync{display:inline-flex;align-items:center;gap:6px;font-size:12px;color:var(--muted)}
+.sync i{width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.sync.live i{background:var(--good)}
+.sync.off i{background:var(--bad)}
+.banner{background:var(--warn-bg);color:var(--warn);border-radius:10px;padding:10px 12px;font-size:13px}
+.card{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:16px;display:flex;flex-direction:column;gap:12px;min-width:0}
+.section{display:flex;flex-direction:column;gap:10px;min-width:0}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap}
+.spread{display:flex;justify-content:space-between;align-items:baseline;gap:10px;flex-wrap:wrap}
+/* countdown */
+.count{display:flex;align-items:baseline;gap:10px;flex-wrap:wrap}
+.count b{font-family:var(--display);font-size:56px;line-height:1;font-weight:700;color:var(--accent)}
+.route{display:flex;height:34px;border-radius:9px;overflow:hidden;font-size:12px;font-weight:600}
+.route div{display:flex;align-items:center;justify-content:center;padding:0 6px;white-space:nowrap;overflow:hidden}
+.route .khh{flex:4;background:var(--khh-bg);color:var(--khh)}
+.route .tpe{flex:5;background:var(--tpe-bg);color:var(--tpe)}
+.route .fly{flex:1.3;background:var(--trv-bg);color:var(--trv)}
+.bar{height:10px;border-radius:6px;background:var(--line);overflow:hidden}
+.bar span{display:block;height:100%;background:var(--accent);border-radius:6px}
+.chip{display:inline-flex;align-items:center;font-size:12px;font-weight:600;padding:2px 9px;border-radius:99px;background:var(--line);color:var(--muted)}
+.chip.bad{background:var(--bad-bg);color:var(--bad)}
+.chip.warn{background:var(--warn-bg);color:var(--warn)}
+.chip.good{background:var(--good-bg);color:var(--good)}
+.chip.khh{background:var(--khh-bg);color:var(--khh)}
+.chip.tpe{background:var(--tpe-bg);color:var(--tpe)}
+.chip.trv,.chip.fly{background:var(--trv-bg);color:var(--trv)}
+/* buttons and fields */
+button,select,input,textarea{font:inherit;color:inherit}
+.btn{background:var(--accent);color:var(--accent-ink);border:0;border-radius:10px;padding:9px 14px;font-weight:600;cursor:pointer}
+.btn.ghost{background:transparent;color:var(--accent);border:1px solid var(--line)}
+.btn:disabled{opacity:.5;cursor:not-allowed}
+.seg{display:flex;background:var(--line);border-radius:11px;padding:3px;gap:3px}
+.seg button{flex:1;border:0;background:transparent;padding:8px 6px;border-radius:9px;font-weight:600;color:var(--muted);cursor:pointer}
+.seg button[aria-pressed="true"]{background:var(--surface);color:var(--ink)}
+input[type=text],input[type=number],select,textarea{width:100%;background:var(--bg);border:1px solid var(--line);border-radius:9px;padding:8px 10px;min-width:0}
+textarea{resize:vertical;min-height:64px}
+label.f{display:flex;flex-direction:column;gap:4px;font-size:13px;color:var(--muted);font-weight:600;min-width:0}
+.grid2{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:10px}
+/* day cards */
+.daycard{background:var(--surface);border:1px solid var(--line);border-radius:14px;padding:14px;display:flex;flex-direction:column;gap:10px;min-width:0}
+.daycard header{display:flex;justify-content:space-between;gap:10px;align-items:flex-start}
+.part{display:grid;grid-template-columns:84px 1fr;gap:8px;font-size:14px}
+.part b{font-size:12px;letter-spacing:.05em;text-transform:uppercase;color:var(--muted);padding-top:2px}
+.dayhead{width:100%;text-align:left;background:var(--surface);border:1px solid var(--line);border-radius:12px;padding:12px 14px;display:flex;align-items:center;gap:12px;cursor:pointer}
+.dayhead .d{font-family:var(--display);font-weight:700;font-size:22px;min-width:44px;text-align:center;line-height:1}
+.dayhead .d small{display:block;font-family:var(--body);font-size:11px;color:var(--muted);font-weight:600;text-transform:uppercase}
+.dayhead .t{flex:1;min-width:0}
+.dayhead .t b{display:block}
+.dayhead .t span{font-size:13px;color:var(--muted)}
+.kh{border-left:5px solid var(--khh)} .tp{border-left:5px solid var(--tpe)} .tv{border-left:5px solid var(--trv)}
+/* calendar */
+.cal{display:grid;grid-template-columns:repeat(7,1fr);gap:4px}
+.cal .w{font-size:11px;font-weight:700;text-align:center;color:var(--muted);text-transform:uppercase;padding:2px 0}
+.cal button{aspect-ratio:1/1.1;border:1px solid transparent;background:var(--surface);border-radius:10px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:2px;cursor:pointer;padding:0;min-width:0}
+.cal button b{font-family:var(--display);font-size:16px}
+.cal button small{font-size:9px;font-weight:700;letter-spacing:.04em}
+.cal .out{opacity:.35;background:transparent;cursor:default}
+.cal .khh{background:var(--khh-bg);color:var(--khh)} .cal .tpe{background:var(--tpe-bg);color:var(--tpe)} .cal .trv{background:var(--trv-bg);color:var(--trv)}
+.cal .today{border-color:var(--ink)}
+.cal .sel{outline:2px solid var(--accent);outline-offset:1px}
+.legend{display:flex;gap:8px;flex-wrap:wrap}
+/* todo */
+.item{display:flex;gap:12px;align-items:flex-start;padding:12px 0;border-top:1px solid var(--line)}
+.item:first-child{border-top:0}
+.item .tick{background:none;border:0;padding:0;cursor:pointer;flex:none;line-height:0;margin-top:1px}
+.item .body{flex:1;min-width:0;display:flex;flex-direction:column;gap:4px}
+.item.done .tx{color:var(--muted);text-decoration:line-through}
+.meta{display:flex;gap:6px;flex-wrap:wrap;align-items:center;font-size:12px;color:var(--muted)}
+/* tables */
+.tbl{overflow-x:auto}
+table{border-collapse:collapse;width:100%;font-size:13.5px;min-width:440px}
+th{text-align:left;font-size:12px;color:var(--muted);text-transform:uppercase;letter-spacing:.04em;padding:6px 8px 6px 0;border-bottom:1px solid var(--line)}
+td{padding:8px 8px 8px 0;border-bottom:1px solid var(--line);vertical-align:top}
+td.r,th.r{text-align:right;font-variant-numeric:tabular-nums}
+tr.total td{font-weight:700;border-bottom:0}
+.opt{display:flex;flex-direction:column;gap:6px;padding:14px;border:1px solid var(--line);border-radius:12px;background:var(--surface)}
+.opt .v{font-weight:700}
+.opt .v.yes{color:var(--good)} .opt .v.no{color:var(--bad)}
+/* bottom nav */
+nav.tabs{position:fixed;left:0;right:0;bottom:0;background:var(--surface);border-top:1px solid var(--line);z-index:5;
+  padding:6px max(8px,env(safe-area-inset-right,0px)) calc(6px + env(safe-area-inset-bottom,0px)) max(8px,env(safe-area-inset-left,0px))}
+nav.tabs div{max-width:720px;margin:0 auto;display:flex}
+nav.tabs a{flex:1;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:600;color:var(--muted);text-decoration:none;padding:6px 0;border-radius:10px}
+nav.tabs a[aria-current="page"]{color:var(--accent)}
+nav.tabs svg{width:22px;height:22px;fill:none;stroke:currentColor;stroke-width:1.8;stroke-linecap:round;stroke-linejoin:round}
+.toast{position:fixed;left:50%;transform:translateX(-50%);bottom:calc(76px + env(safe-area-inset-bottom,0px));background:var(--ink);color:var(--bg);padding:9px 14px;border-radius:10px;font-size:13px;z-index:9;max-width:90%}
+@media (prefers-reduced-motion:no-preference){.bar span{transition:width .3s}}
+@media (max-width:420px){.part{grid-template-columns:1fr;gap:0}.count b{font-size:48px}}
+
+</style>
+</head>
+<body>
+<div class="wrap" id="app"></div>
+<nav class="tabs" aria-label="Sections"><div>
+  <a href="#home" data-v="home"><svg viewBox="0 0 24 24"><path d="M4 11l8-7 8 7v9a1 1 0 0 1-1 1h-4v-6h-6v6H5a1 1 0 0 1-1-1z"/></svg>Home</a>
+  <a href="#calendar" data-v="calendar"><svg viewBox="0 0 24 24"><rect x="4" y="5" width="16" height="15" rx="2"/><path d="M8 3v4M16 3v4M4 10h16"/></svg>Calendar</a>
+  <a href="#schedule" data-v="schedule"><svg viewBox="0 0 24 24"><path d="M9 6h11M9 12h11M9 18h11M4 6h.01M4 12h.01M4 18h.01"/></svg>Days</a>
+  <a href="#todo" data-v="todo"><svg viewBox="0 0 24 24"><rect x="4" y="4" width="16" height="16" rx="3"/><path d="M8 12.5l3 3 5-6"/></svg>To-do</a>
+  <a href="#rides" data-v="rides"><svg viewBox="0 0 24 24"><path d="M5 16V11l2-5h10l2 5v5M3 16h18M7 19v-3M17 19v-3"/><circle cx="8" cy="13" r=".6"/><circle cx="16" cy="13" r=".6"/></svg>Rides</a>
+</div></nav>
+<div class="toast" id="toast" hidden></div>
+
+
+<script>
+(function(){
+"use strict";
+/* ---------- static trip data ---------- */
+const START=new Date(2026,11,13), MS=864e5;
+const addDays=(d,n)=>new Date(d.getFullYear(),d.getMonth(),d.getDate()+n);
+const today=()=>{const n=new Date();return new Date(n.getFullYear(),n.getMonth(),n.getDate())};
+const dayDiff=(a,b)=>Math.round((a-b)/MS);
+const fmt=(d,o)=>d.toLocaleDateString('en-GB',o);
+const esc=s=>String(s==null?"":s).replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]));
+const money=n=>Math.round(n).toLocaleString('en-US');
+
+const DAYS=[
+{c:"Taoyuan → Kaohsiung",h:"Land at noon, HSR south",m:"Flight lands 12:00. Immigration, eSIM or SIM, collect luggage, change a little cash.",a:"2 vans: airport to THSR Taoyuan (short hop). HSR to Zuoying (about 2 hrs). Check in and rest.",e:"Early halal dinner near the hotel. Early night.",t:"2 vans + HSR (14 seats reserved together)",s:"Kaohsiung hotel (3 rooms)",x:"Pack snacks and halal instant food for the long arrival day. Plan jamak per your musafir schedule."},
+{c:"Kaohsiung",h:"Lotus Pond, Pagodas, Pier-2",m:"Lotus Pond and Dragon & Tiger Pagodas (flat, easy walking).",a:"Rest at hotel 1–3pm. Pier-2 Art Center (open space for kids, easy for elderly).",e:"Love River stroll, early dinner.",t:"MRT or taxis (2 vans if tired)",s:"Kaohsiung hotel",x:"Check halal options near Pier-2 before leaving. Schedule prayer breaks at the hotel."},
+{c:"Kaohsiung",h:"Fo Guang Shan day",m:"Van to Fo Guang Shan Buddha Memorial Center (about 45 min). Wide open grounds.",a:"Lunch there (vegetarian options on site), return to hotel to rest.",e:"Optional: Liuhe Night Market if energy allows; otherwise hotel dinner.",t:"2 vans, full day",s:"Kaohsiung hotel",x:"Vegetarian food on site is a safe fallback. Prayer break mid-afternoon."},
+{c:"Kaohsiung (Tainan day trip)",h:"Tainan heritage day",m:"Van to Tainan (about 1 hr). Anping Old Fort and old street.",a:"Chihkan Tower, snacks. Head back by 4–5pm.",e:"Rest, early dinner in Kaohsiung.",t:"2 vans, full day",s:"Kaohsiung hotel",x:"Tainan street food is not always halal: confirm each stall or bring picnic food."},
+{c:"Kaohsiung → Taipei",h:"Cijin Island, HSR north",m:"Ferry to Cijin Island: seaside, bikes, fish lunch. Back by noon.",a:"Collect luggage, check out. HSR Zuoying to Taipei (about 2 hrs).",e:"Vans from Taipei Station to hotel. Check in, halal dinner.",t:"Ferry, 2 vans (hotel and station), HSR",s:"Taipei hotel (3 rooms)",x:"Reserve HSR seats together in advance. Pray at the station or on board if needed."},
+{c:"Taipei",h:"Taipei Grand Mosque (Friday)",m:"Taipei Grand Mosque and prayers (it is Friday). Halal lunch nearby.",a:"Easy afternoon: rest at hotel or a short park walk.",e:"Dinner near the hotel.",t:"MRT or taxis",s:"Taipei hotel",x:"Check Friday prayer time with the mosque before going."},
+{c:"Taipei",h:"Taipei 101 & Xinyi",m:"Taipei 101 early, before the crowds. Xinyi area shopping.",a:"Lunch, hotel rest. Optional Elephant Mountain view for those who want it.",e:"Halal dinner; see the 101 lights in the evening.",t:"2 vans, full day",s:"Taipei hotel",x:"Book 101 observatory time slots ahead."},
+{c:"Taipei",h:"National Palace Museum + Shilin",m:"National Palace Museum (kids' trail, rest spots for elderly).",a:"Lunch and rest.",e:"Shilin Night Market. Keep a headcount.",t:"2 vans, full day",s:"Taipei hotel",x:"Headcount at the Shilin entrance and exit. Check which stalls are halal."},
+{c:"Taipei",h:"Maokong Gondola & tea",m:"Maokong Gondola and tea houses (skip if raining heavily).",a:"Free time. Optional: Beitou (check swimwear and age rules for hot springs).",e:"Family dinner, start light packing.",t:"MRT or vans (optional)",s:"Taipei hotel",x:"Check gondola closure days and wait times."},
+{c:"Taipei",h:"Souvenirs & departure",m:"Dihua Street or Ximending souvenirs. Late checkout, store luggage.",a:"Early dinner. Final pack. Hotel pickup about 19:30.",e:"Vans to Taoyuan; at the airport by about 21:00 for the 00:00 flight.",t:"2 vans (consider a 3rd for luggage)",s:"Check out, depart for airport",x:"Final prayers before leaving the hotel. Keep passports and boarding passes in hand."},
+{c:"Flight home",h:"Flight out 00:00",m:"00:00 flight leaves Taoyuan for Singapore (the night of 22 Dec).",a:"",e:"",t:"",s:"",x:""}
+];
+/* ITINERARY_V2 */
+DAYS[1]={c:"Kaohsiung",h:"Lotus Pond, Pagodas, Cijin",m:"Lotus Pond and Dragon & Tiger Pagodas (flat, easy walking).",a:"Rest at hotel 1–3pm. Then ferry to Cijin Island for the seaside and bikes (back by dinner).",e:"Pier-2 Art Center and Love River stroll, early dinner.",t:"MRT, taxis and ferry (2 vans if tired)",s:"Kaohsiung hotel",x:"Check halal options near Pier-2 and the ferry before leaving. Schedule prayer breaks at the hotel."};
+DAYS[4]={c:"Kaohsiung → Taipei",h:"Strawberry farm, HSR north",m:"Check out, count luggage. HSR Zuoying to Taichung (about 1 hr).",a:"Van from Taichung HSR to a strawberry farm near Tanzi or Daya (confirm distance and booking). Pick strawberries; eat a packed lunch.",e:"Van back to HSR, then HSR to Taipei (about 1 hr). Vans to hotel. Check in, halal dinner.",t:"HSR (via Taichung), 2 vans all day",s:"Taipei hotel (3 rooms)",x:"Phone the farm ahead: the season starts in December, so check strawberries are ready and the group can enter. Bring a packed halal lunch."};
+DAYS[6]={c:"Taipei (Hsinchu day trip)",h:"Hsinchu orange picking",m:"Van to Xinpu, Hsinchu (confirm drive time). Xinbao Tourist Orchard: wide grounds, suits all ages.",a:"Pick oranges and tangerines (charged by weight). Packed lunch at the orchard.",e:"Back in Taipei by about 5pm. Easy dinner near the hotel.",t:"2 vans, full day",s:"Taipei hotel",x:"Weekend crowds are possible, so phone ahead. Bring a packed halal lunch and water."};
+DAYS[8]={c:"Taipei",h:"Pokémon Center & Taipei 101",m:"Late breakfast, then MRT to Taipei City Hall (Exit 3). Pokémon Center Taipei (Shin Kong Mitsukoshi Xinyi Place A11, 3F) opens at 11:00; aim to arrive at opening on this weekday.",a:"Lunch in Xinyi, then Taipei 101 (mall and observatory). Rest as needed.",e:"Halal dinner; see the Taipei 101 lights, then MRT back.",t:"MRT (Bannan Line) or taxis",s:"Taipei hotel",x:"Check the Pokémon Center ticket and queue rules on the day. Plan prayers at the hotel before leaving or at the mall."};
+const cityKey=c=>c.includes("→")?"trv":c.includes("Kaohsiung")?"khh":c.includes("Taipei")?"tpe":"trv";
+const tag={khh:"KHH",tpe:"TPE",trv:"TRAVEL"};
+const STATUSES=["Planned","Booked","Done","Skipped"];
+
+const TASKS=[
+["p1","Check every passport is valid at least 6 months beyond 23 Dec 2026","Documents",75,"Renew now if not. Confirm entry rules for each passport holder."],
+["p2","Confirm flights and baggage allowance for everyone","Bookings",60,"Flight leaves 00:00 on 23 Dec (night of 22 Dec)."],
+["p3","Book 3 hotel rooms: Kaohsiung 13–17 Dec (4 nights)","Bookings",60,"Near HSR or MRT, lift access. Ask for early check-in on 13 Dec."],
+["p4","Book 3 hotel rooms: Taipei 17–22 Dec (5 nights)","Bookings",60,"Ask for late checkout and luggage storage on 22 Dec."],
+["p5","Buy travel insurance for all travellers","Documents",45,"Include medical cover; check age limits for elderly."],
+["p6","Book 2 van charters for the days on the Rides tab","Bookings",40,"Ask for child seats, driver language, luggage space, overtime rules."],
+["p7","Get 2 quotes for vans and compare with the estimate","Bookings",45,"December is peak season."],
+["p8","Book Taipei 101 observatory and any timed tickets","Bookings",30,"Check opening hours and closure days."],
+["p9","Reserve HSR seats together for 13 Dec and 17 Dec","Bookings",28,"Check when booking opens (about 4 weeks before). Under-6s ride free without a seat."],
+["p10","Shortlist halal restaurants near each hotel and each day's stops","Planning",21,"Save to Google Maps with a list per city."],
+["p11","Prepare the daily prayer plan and prayer-friendly stops","Planning",21,"Pack prayer mats; note Taipei Grand Mosque for Friday 18 Dec."],
+["p12","Get eSIMs or pocket wifi for the group","Tech",14,"At least 1 per family unit; test before leaving."],
+["p13","Buy Taiwan power adaptors (110V, Type A/B plugs)","Tech",14,"Check device voltage ranges before plugging in."],
+["p14","Pack winter clothes: Kaohsiung mild, Taipei cool and often rainy","Packing",10,"Layers, light jackets, umbrellas or ponchos."],
+["p15","Pack medicines for elderly and children; keep prescriptions handy","Health",10,"Carry in hand luggage."],
+["p16","Arrange wheelchair or assistance at the airport if needed","Health",14,"Request through the airline."],
+["p17","Bring a travel stroller and snacks for the 2-year-old","Packing",7,"A foldable stroller helps in stations and markets."],
+["p18","Pack halal instant food and snacks for long travel days","Packing",7,"Arrival day and departure day especially."],
+["p19","Change some Singapore dollars to NT$; check card use abroad","Money",10,"Keep cash for markets; many stalls are cash only."],
+["p20","Share the final itinerary and set buddy pairs for children","Planning",7,"Include emergency contacts and hotel addresses in Chinese."],
+["p21","Check the Taiwan arrival card or entry requirements","Documents",3,"Look up current rules before travel."],
+["p22","Make copies of passports and insurance (photo and paper)","Documents",3,"Store in a shared folder."],
+["p23","Online check-in for the flight; prepare baggage tags","Bookings",1,"Flight leaves 00:00 on 23 Dec; check-in opens early."]
+].map(a=>({id:a[0],t:a[1],cat:a[2],before:a[3],note:a[4]}));
+TASKS.push({id:"p24",t:"Phone the Taichung strawberry farm and Xinbao Orchard: confirm picking is open and group entry",cat:"Bookings",before:21,note:"Season starts in December. Ask about raised beds for elderly and costs by weight."},{id:"p25",t:"Check Pokémon Center Taipei hours and queue rules; plan to arrive at 11:00 on Mon 21 Dec",cat:"Planning",before:14,note:"Open Mon–Thu 11:00–21:30. Weekdays are usually easier than weekends."});
+const PSTAT=["Not started","In progress","Done"];
+
+const ROUT=[["Headcount at every transfer (van, HSR, MRT, market exits)","All day"],["Water, tissues and snacks for children and elderly","Morning"],["Check weather; confirm next-day van pickup time with the driver","Evening"],["Prayer breaks planned at suitable stops","All day"],["Charge phones and power banks","Evening"]];
+const SPEC={0:[["Immigration; collect all luggage; count bags","Arrival"],["Meet vans, load luggage, confirm HSR tickets","Arrival"],["Check in and confirm breakfast time","Evening"]],2:[["Meet drivers in the lobby; confirm Fo Guang Shan opening times","Morning"]],3:[["Confirm the halal food plan for Tainan before leaving","Morning"]],4:[["Check out, count luggage; HSR boarding with all seats","Afternoon"],["Confirm hotel check-in and van pickup at Taipei Station","Evening"]],5:[["Confirm Friday prayer time at the mosque","Morning"]],6:[["Confirm 101 time slot and tickets","Morning"]],8:[["Check Maokong gondola status","Morning"],["Start final packing and souvenir count","Evening"]],9:[["Late checkout and luggage storage confirmed","Morning"],["Passports, boarding passes, bags counted; vans at 19:30","Evening"],["Final headcount at airport check-in","Night"]]};
+SPEC[4]=[["Check out, count luggage; HSR to Taichung with all seats","Morning"],["Confirm van pickup at Taichung HSR and farm closing time","Morning"],["Confirm hotel check-in and van pickup at Taipei Station","Evening"]];
+SPEC[6]=[["Confirm Hsinchu orchard opening and van pickup time","Morning"]];
+SPEC[8]=[["Reach Pokémon Center by 11:00; check queue ticket rules","Morning"],["Confirm Taipei 101 time slot and tickets","Morning"],["Start final packing and souvenir count","Evening"]];
+const DURING=[];
+for(let o=0;o<10;o++){const items=ROUT.slice(0,3).concat(SPEC[o]||[],o<9?ROUT.slice(3,5):[]);items.forEach((it,k)=>DURING.push({id:o+"-"+k,day:o,t:it[0],w:it[1]}))}
+
+const VANS=[[0,"Airport to THSR Taoyuan with luggage","Transfer"],[2,"Fo Guang Shan day trip","Full day"],[3,"Tainan day trip","Full day"],[4,"THSR Taipei Station to hotel","Transfer"],[6,"Taipei 101 and Xinyi","Full day"],[7,"National Palace Museum and Shilin","Full day"],[9,"Hotel to Taoyuan airport","Transfer"]];
+VANS[3]=[4,"Taichung strawberry farm round trip, then Taipei Station to hotel","Full day"];VANS[4]=[6,"Hsinchu orange picking day trip","Full day"];
+const DEF={elderly:2,adults:4,teens:3,kids:3,toddlers:2,perVan:7,fullDay:6500,transfer:1800,fx:24,hsrFare:1490};
+const BOOKS=[["out","Outbound flight (13 Dec)","e.g. flight no. · ref · lands 12:00"],["back","Return flight (23 Dec 00:00)","e.g. flight no. · ref"],["khh","Kaohsiung hotel (13–17 Dec)","e.g. hotel · 3 rooms · ref"],["tpe","Taipei hotel (17–22 Dec)","e.g. hotel · 3 rooms · ref"],["van","Van company","e.g. company · phone · deposit paid"],["hsr","HSR booking refs","e.g. 13 Dec: ref · 17 Dec: ref"]];
+
+/* ---------- state and sharing (Google Sheets backend) ---------- */
+/* Paste the web app address from Apps Script between the quotes (see README). */
+const API_URL="https://script.google.com/macros/s/AKfycbzs1OjlNU9R3jppr9rds1w2qgMq1n8D9jUFT9eJG3hjXoMNad2rzLvrnjIeaKqLR9W8/exec";
+const SETUP_OK=/^https:\/\/script\.google\.com\//.test(API_URL);
+const S={pretrip:{},during:{},days:{},bookings:{},settings:{}};
+const ME={name:"",pass:""};
+try{ME.name=localStorage.getItem("tt_name")||"";ME.pass=localStorage.getItem("tt_pass")||""}catch(e){}
+let sync="connecting",unauth=false,view="home",homeDay=null,selDay=null,pFilter="all",tMode="before",open=new Set(),canWrite=false;
+const app=document.getElementById("app");
+const cfg=()=>Object.assign({},DEF,S.settings.main||{});
+const hasCreds=()=>!!(ME.name&&ME.pass);
+const canEdit=()=>SETUP_OK&&hasCreds()&&!unauth;
+const queues=new Map(),inflight={};
+function toast(m){const t=document.getElementById("toast");t.textContent=m;t.hidden=false;clearTimeout(toast.h);toast.h=setTimeout(()=>{t.hidden=true},3500)}
+async function call(payload){
+  const r=await fetch(API_URL,{method:"POST",headers:{"Content-Type":"text/plain;charset=utf-8"},body:JSON.stringify(Object.assign({pass:ME.pass},payload))});
+  return r.json();
+}
+async function pull(){
+  if(!SETUP_OK||!ME.pass)return;
+  try{
+    const j=await call({action:"all"});
+    if(j.error==="unauthorized"){unauth=true;sync="live";scheduleRender();return}
+    unauth=false;
+    const next={pretrip:{},during:{},days:{},bookings:{},settings:{}};
+    for(const k in (j.data||{})){const p=k.split("/");if(next[p[0]])next[p[0]][p[1]]=j.data[k]}
+    for(const path in inflight){if(inflight[path]>0){const p=path.split("/");if(S[p[0]]&&S[p[0]][p[1]]!==undefined)next[p[0]][p[1]]=S[p[0]][p[1]]}}
+    for(const c in S)S[c]=next[c];
+    sync="live";scheduleRender();
+  }catch(e){sync="off";scheduleRender()}
+}
+function save(coll,id,data){
+  S[coll][id]=data;scheduleRender();
+  if(!canWrite)return;
+  const path=coll+"/"+id;
+  inflight[path]=(inflight[path]||0)+1;
+  const prev=queues.get(path)||Promise.resolve();
+  queues.set(path,prev.then(()=>call({action:"set",key:path,value:data,name:ME.name})).then(j=>{
+    if(j&&j.error==="unauthorized"){unauth=true;scheduleRender()}
+    else if(j&&j.error)toast("Could not save ("+j.error+").");
+  }).catch(()=>toast("Could not save. Check your connection and try again.")).finally(()=>{inflight[path]--}));
+}
+let raf=0,pending=false;
+function scheduleRender(){
+  const a=document.activeElement;
+  if(a&&/^(INPUT|TEXTAREA|SELECT)$/.test(a.tagName)&&app.contains(a)){pending=true;return}
+  cancelAnimationFrame(raf);raf=requestAnimationFrame(render);
+}
+document.addEventListener("focusout",()=>{if(pending){pending=false;setTimeout(scheduleRender,60)}});
+function setupCard(){return '<div class="banner">This copy is not connected yet. Open index.html and paste your Apps Script web app address into API_URL (see README).</div>'}
+function gateCard(){return `<form class="card" id="gate"><h2>Join the family plan</h2><p class="small muted">Enter your name and the family passcode. They are saved on this device only.</p><label class="f">Your name<input type="text" id="g-name" value="${esc(ME.name)}" autocomplete="name"></label><label class="f">Family passcode<input type="password" id="g-pass" autocomplete="off"></label><button class="btn" type="submit">Join</button></form>`}
+document.addEventListener("submit",e=>{
+  if(e.target.id!=="gate")return;
+  e.preventDefault();
+  const n=document.getElementById("g-name").value.trim(),p=document.getElementById("g-pass").value.trim();
+  if(!n||!p){toast("Enter your name and the passcode.");return}
+  ME.name=n.slice(0,40);ME.pass=p;unauth=false;
+  try{localStorage.setItem("tt_name",ME.name);localStorage.setItem("tt_pass",ME.pass)}catch(x){}
+  sync="connecting";render();pull();
+});
+function boot(){
+  render();
+  pull();
+  setInterval(()=>{if(!document.hidden&&canWrite)pull()},8000);
+  document.addEventListener("visibilitychange",()=>{if(!document.hidden&&canWrite)pull()});
+}
+
+/* ---------- helpers ---------- */
+const tickSvg=s=>s==="Done"?'<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="11" fill="var(--good)"/><path d="M7 12.5l3.2 3.2L17 9" fill="none" stroke="var(--bg)" stroke-width="2.4" stroke-linecap="round" stroke-linejoin="round"/></svg>'
+ :s==="In progress"?'<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--warn)" stroke-width="2"/><path d="M12 2a10 10 0 0 1 0 20z" fill="var(--warn)"/></svg>'
+ :'<svg viewBox="0 0 24 24" width="28" height="28"><circle cx="12" cy="12" r="10" fill="none" stroke="var(--muted)" stroke-width="2"/></svg>';
+const who=r=>r&&r.by?esc(r.by):"";
+const dis=()=>canWrite?"":" disabled";
+function costs(){
+  const c=cfg(),total=c.elderly+c.adults+c.teens+c.kids+c.toddlers,vans=Math.max(1,Math.ceil(total/c.perVan));
+  const vrows=VANS.map(v=>({d:addDays(START,v[0]),p:v[1],ty:v[2],rate:v[2]==="Full day"?c.fullDay:c.transfer,cost:vans*(v[2]==="Full day"?c.fullDay:c.transfer)}));
+  const van=vrows.reduce((a,b)=>a+b.cost,0);
+  const full=c.elderly+c.adults+c.teens,hsr=(full*c.hsrFare+c.kids*c.hsrFare*.5)*2;
+  const tot=van+hsr;
+  return{c,total,vans,vrows,van,hsr,tot,sgd:tot/c.fx,pp:tot/c.fx/total,full};
+}
+function pdue(t){return addDays(START,-t.before)}
+function pstatus(t){return (S.pretrip[t.id]||{}).status||"Not started"}
+function pflag(t){if(pstatus(t)==="Done")return"";const d=dayDiff(pdue(t),today());return d<0?"bad":d<=7?"warn":""}
+function dayCard(i,full){
+  const d=DAYS[i],dt=addDays(START,i),k=cityKey(d.c),rec=S.days["d"+i]||{},st=rec.status||"Planned";
+  const part=(l,v)=>v?`<div class="part"><b>${l}</b><span>${esc(v)}</span></div>`:"";
+  let h=`<article class="daycard ${k==="khh"?"kh":k==="tpe"?"tp":"tv"}"><header><div><div class="eyebrow">${fmt(dt,{weekday:"short",day:"numeric",month:"short"})} · ${esc(d.c)}</div><h3>${esc(d.h)}</h3></div><span class="chip ${st==="Done"?"good":st==="Booked"?"tpe":""}">${st}</span></header>`;
+  h+=part("Morning",d.m)+part("Afternoon",d.a)+part("Evening",d.e);
+  if(full){
+    h+=part("Transport",d.t)+part("Stay",d.s)+part("Halal & prayer",d.x);
+    h+=`<div class="grid2"><label class="f">Status<select id="st-${i}" data-day="${i}" data-f="status"${dis()}>${STATUSES.map(s=>`<option${s===st?" selected":""}>${s}</option>`).join("")}</select></label></div>`;
+    h+=`<label class="f">Family notes for this day<textarea id="note-${i}" data-day="${i}" data-f="note" placeholder="e.g. Aunty prefers a short walk here"${dis()}>${esc(rec.note||"")}</textarea></label>`;
+    if(rec.note&&who(rec))h+=`<div class="small muted">Last note by ${who(rec)}</div>`;
+  }
+  return h+"</article>";
+}
+
+/* ---------- views ---------- */
+function vHome(){
+  const t=today(),c=costs(),n=dayDiff(START,t),last=dayDiff(t,START);
+  const done=TASKS.filter(x=>pstatus(x)==="Done").length,pct=Math.round(done/TASKS.length*100);
+  const over=TASKS.filter(x=>pflag(x)==="bad").length,soon=TASKS.filter(x=>pflag(x)==="warn").length;
+  if(homeDay==null)homeDay=Math.max(0,Math.min(10,last));
+  const count=n>0?`<b class="num">${n}</b><span>days to go</span>`:last<=10?`<b class="num">${last+1}</b><span>of 11 days, ${esc(DAYS[last].h)}</span>`:`<b>Done</b><span>Trip finished</span>`;
+  let h=`<section class="section"><div class="count">${count}</div>
+   <div class="route" role="img" aria-label="Route: 4 nights Kaohsiung, 5 nights Taipei, flight at midnight"><div class="khh">Kaohsiung · 4 nights</div><div class="tpe">Taipei · 5 nights</div><div class="fly">Fly 00:00</div></div>
+   <div class="spread small muted"><span>Land Taoyuan, Sun 13 Dec, 12:00</span><span>${c.total} travellers</span></div></section>`;
+  h+=`<section class="card"><div class="spread"><h2>Before we go</h2><a href="#todo" class="small">Open list</a></div>
+   <div class="bar" role="progressbar" aria-valuenow="${pct}" aria-valuemin="0" aria-valuemax="100"><span style="width:${pct}%"></span></div>
+   <div class="row"><span class="num"><b>${done}</b> of ${TASKS.length} done</span>${over?`<span class="chip bad">${over} overdue</span>`:""}${soon?`<span class="chip warn">${soon} due this week</span>`:""}</div></section>`;
+  h+=`<section class="section"><div class="spread"><h2>Day by day</h2><div class="row"><button class="btn ghost" data-a="hprev" aria-label="Previous day"${homeDay<=0?" disabled":""}>Prev</button><button class="btn ghost" data-a="hnext" aria-label="Next day"${homeDay>=10?" disabled":""}>Next</button></div></div>${dayCard(homeDay,false)}</section>`;
+  h+=`<section class="card"><div class="spread"><h2>Transport budget</h2><a href="#rides" class="small">Details</a></div>
+   <div class="row" style="gap:24px"><div><div class="eyebrow">Total</div><b class="num" style="font-size:22px">NT$${money(c.tot)}</b><div class="small muted num">about S$${money(c.sgd)}</div></div><div><div class="eyebrow">Per person</div><b class="num" style="font-size:22px">S$${money(c.pp)}</b></div></div>
+   <p class="small muted">Vans and HSR only. Meals, tickets, hotels and flights are not included.</p></section>`;
+  const bk=S.bookings.main||{};
+  h+=`<section class="card"><h2>Key bookings</h2>${BOOKS.map(b=>`<label class="f">${b[1]}<input type="text" id="bk-${b[0]}" data-bk="${b[0]}" value="${esc(bk[b[0]]||"")}" placeholder="${esc(b[2])}"${dis()}></label>`).join("")}</section>`;
+  return h;
+}
+function vCalendar(){
+  const t=today(),first=new Date(2026,10,30);
+  if(selDay==null)selDay=Math.max(0,Math.min(10,dayDiff(t,START)));
+  let cells="";
+  for(const w of ["Mon","Tue","Wed","Thu","Fri","Sat","Sun"])cells+=`<div class="w">${w}</div>`;
+  for(let i=0;i<35;i++){
+    const d=addDays(first,i),off=dayDiff(d,START),inTrip=off>=0&&off<=10,dec=d.getMonth()===11;
+    const cls=[inTrip?cityKey(DAYS[off].c):"",!dec?"out":"",dayDiff(d,t)===0?"today":"",inTrip&&off===selDay?"sel":""].join(" ");
+    cells+=inTrip?`<button class="${cls}" data-a="pick" data-i="${off}" aria-label="${fmt(d,{weekday:"long",day:"numeric",month:"long"})}, ${esc(DAYS[off].h)}"><b>${d.getDate()}</b><small>${tag[cityKey(DAYS[off].c)]}</small></button>`
+      :`<button class="${cls}" tabindex="-1" aria-hidden="true" style="cursor:default"><b>${d.getDate()}</b></button>`;
+  }
+  return `<section class="section"><div><div class="eyebrow">2026</div><h2>December</h2></div>
+   <div class="legend"><span class="chip khh">Kaohsiung</span><span class="chip tpe">Taipei</span><span class="chip trv">Travel and flight</span></div>
+   <div class="cal">${cells}</div></section>
+   <section class="section"><h2>Selected day</h2>${dayCard(selDay,false)}<button class="btn" data-a="openday" data-i="${selDay}">Open full day and notes</button></section>`;
+}
+function vSchedule(){
+  let h=`<section class="section"><div><div class="eyebrow">13–23 Dec 2026</div><h2>Every day, in one place</h2></div></section>`;
+  const sel=window.__openFocus;
+  DAYS.forEach((d,i)=>{
+    const dt=addDays(START,i),k=cityKey(d.c),rec=S.days["d"+i]||{},isOpen=open.has(i);
+    h+=`<div class="section"><button class="dayhead ${k==="khh"?"kh":k==="tpe"?"tp":"tv"}" data-a="toggle" data-i="${i}" aria-expanded="${isOpen}"><div class="d">${dt.getDate()}<small>${fmt(dt,{weekday:"short"})}</small></div><div class="t"><b>${esc(d.h)}</b><span>${esc(d.c)}${rec.status&&rec.status!=="Planned"?" · "+rec.status:""}</span></div></button>${isOpen?dayCard(i,true):""}</div>`;
+  });
+  return h;
+}
+function vTodo(){
+  let h=`<section class="section"><div class="seg" role="group" aria-label="List"><button data-a="tmode" data-m="before" aria-pressed="${tMode==="before"}">Before the trip</button><button data-a="tmode" data-m="during" aria-pressed="${tMode==="during"}">During the trip</button></div></section>`;
+  if(tMode==="before"){
+    const list=TASKS.filter(t=>pFilter==="all"||(pFilter==="open"?pstatus(t)!=="Done":pstatus(t)==="Done")).sort((a,b)=>b.before-a.before);
+    h+=`<section class="section"><div class="seg" role="group" aria-label="Filter">${[["all","All"],["open","Open"],["done","Done"]].map(f=>`<button data-a="pfilter" data-f="${f[0]}" aria-pressed="${pFilter===f[0]}">${f[1]}</button>`).join("")}</div>
+     <div class="card" style="padding-block:4px">${list.length?list.map(t=>{const s=pstatus(t),r=S.pretrip[t.id],fl=pflag(t);
+       return `<div class="item${s==="Done"?" done":""}"><button class="tick" data-a="cycle" data-id="${t.id}" aria-label="${esc(t.t)}: ${s}. Tap to change"${dis()}>${tickSvg(s)}</button><div class="body"><span class="tx">${esc(t.t)}</span><div class="meta"><span>Due ${fmt(pdue(t),{day:"numeric",month:"short"})}</span><span class="chip">${t.cat}</span>${fl?`<span class="chip ${fl}">${fl==="bad"?"Overdue":"Due soon"}</span>`:""}${s==="In progress"?'<span class="chip warn">In progress</span>':""}${who(r)?`<span>${s==="Done"?"Done":"Updated"} by ${who(r)}</span>`:""}</div><span class="small muted">${esc(t.note)}</span></div></div>`}).join(""):'<p class="muted" style="padding:12px 0">Nothing here.</p>'}</div></section>`;
+  }else{
+    const done=DURING.filter(x=>S.during[x.id]&&S.during[x.id].done).length;
+    h+=`<section class="section"><div class="spread"><h2>On the road</h2><span class="muted num">${done} of ${DURING.length} done</span></div>`;
+    for(let o=0;o<10;o++){
+      const its=DURING.filter(x=>x.day===o),dn=its.filter(x=>S.during[x.id]&&S.during[x.id].done).length;
+      h+=`<div class="card" style="gap:4px"><div class="spread"><b>${fmt(addDays(START,o),{weekday:"short",day:"numeric",month:"short"})} · ${esc(DAYS[o].h)}</b><span class="small muted num">${dn}/${its.length}</span></div>`;
+      h+=its.map(x=>{const r=S.during[x.id],dn2=!!(r&&r.done);return `<div class="item${dn2?" done":""}"><button class="tick" data-a="dtick" data-id="${x.id}" aria-label="${esc(x.t)}: ${dn2?"done":"not done"}"${dis()}>${tickSvg(dn2?"Done":"")}</button><div class="body"><span class="tx">${esc(x.t)}</span><div class="meta"><span>${x.w}</span>${dn2&&who(r)?`<span>by ${who(r)}</span>`:""}</div></div></div>`}).join("")+"</div>";
+    }
+    h+="</section>";
+  }
+  return h;
+}
+function vRides(){
+  const c=costs(),k=c.c;
+  const num=(id,l,v,step)=>`<label class="f">${l}<input type="number" inputmode="decimal" id="cfg-${id}" data-cfg="${id}" value="${v}" min="0" step="${step||1}"${dis()}></label>`;
+  let h=`<section class="section"><div><div class="eyebrow">For ${c.total} people</div><h2>Rental and transport</h2></div>
+   <div class="opt"><span class="v yes">Recommended</span><b>Two chartered 9-seater vans with a driver</b><span class="small">Door to door, no driving stress, handles luggage. Use for Fo Guang Shan, Tainan, the Taichung strawberry day, the Hsinchu orange day, the Palace Museum and the airport transfers. Pokémon Center and Taipei 101 are an easy MRT ride. Each van carries about 7 people and about 6 large bags. Estimate: NT$${money(c.van)} (about S$${money(c.van/k.fx)}).</span></div>
+   <div class="opt"><span class="v yes">Recommended</span><b>HSR between cities</b><span class="small">Taoyuan to Kaohsiung on 13 Dec, Kaohsiung to Taipei via Taichung on 17 Dec (about the same as one direct ticket; check when booking). Reserve all seats together. Under 6 free without a seat, 6–11 half price. Foreign seniors get no senior discount. Estimate: NT$${money(c.hsr)}.</span></div>
+   <div class="opt"><span class="v no">Not recommended</span><b>Self-drive rental</b><span class="small">Needs a Singapore licence plus an International Driving Permit from an official issuer. Taiwan drives on the right, with left-hand-drive cars. About NT$3,000 per day per car, and 14 people need 3 cars. Parking is hard and it is stressful with 8 children.</span></div>
+   <div class="opt"><b>Taxis and ride-hailing</b><span class="small">Fine for short hops. 3 taxis per trip, hard to keep the group together, expensive for day trips.</span></div></section>`;
+  h+=`<section class="card"><h2>Estimate settings</h2><p class="small muted">Edit any number. Everyone sees the same figures.</p><div class="grid2">
+   ${num("elderly","Elderly",k.elderly)}${num("adults","Adults",k.adults)}${num("teens","Teens 12–16",k.teens)}${num("kids","Children 6–11",k.kids)}${num("toddlers","Under 6",k.toddlers)}
+   ${num("perVan","Passengers per van",k.perVan)}${num("fullDay","Full-day van (NT$)",k.fullDay,100)}${num("transfer","Transfer per van (NT$)",k.transfer,100)}${num("fx","NT$ per S$1",k.fx,.1)}${num("hsrFare","HSR adult fare (NT$)",k.hsrFare,10)}</div>
+   <p class="small muted">Children's age split, the transfer price and the exchange rate are assumptions. Get real quotes before booking.</p></section>`;
+  h+=`<section class="card"><h2>Van plan (${c.vans} vans)</h2><div class="tbl"><table><thead><tr><th>Date</th><th>Purpose</th><th>Type</th><th class="r">NT$</th></tr></thead><tbody>
+   ${c.vrows.map(r=>`<tr><td>${fmt(r.d,{day:"numeric",month:"short"})}</td><td>${esc(r.p)}</td><td>${r.ty}</td><td class="r">${money(r.cost)}</td></tr>`).join("")}
+   <tr class="total"><td colspan="3">Vans total</td><td class="r">${money(c.van)}</td></tr></tbody></table></div></section>`;
+  h+=`<section class="card"><h2>Budget summary</h2><div class="tbl"><table><tbody>
+   <tr><td>Vans</td><td class="r">NT$${money(c.van)}</td></tr><tr><td>HSR (2 journeys)</td><td class="r">NT$${money(c.hsr)}</td></tr>
+   <tr class="total"><td>Total</td><td class="r">NT$${money(c.tot)}</td></tr><tr><td>Total in Singapore dollars</td><td class="r">S$${money(c.sgd)}</td></tr><tr><td>Per person</td><td class="r">S$${money(c.pp)}</td></tr></tbody></table></div></section>`;
+  h+=`<section class="card"><h2>Booking tips</h2><ul style="margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px">
+   <li>Two vans carry about 12 large bags. On arrival and departure days, plan 1 bag per person or add a third vehicle for luggage.</li>
+   <li>Ask for child seats for the 2-year-old: about NT$200 per day each, maximum 2 per van.</li>
+   <li>Ask each company about driver language, hours included, overtime rate (about NT$500–900 per hour), and any driver accommodation fee on cross-city days finishing after 19:00.</li>
+   <li>Get 2–3 quotes (Klook, KKday, local charter companies) and update the numbers above.</li></ul></section>`;
+  h+=`<section class="section small muted"><b>Sources (checked 31 Oct 2026; verify before booking)</b>
+   <a href="https://www.northwest.com.tw/travel/index_en.php?travel=885" rel="noopener">Van charter rates</a>
+   <a href="https://www.kkday.com/en/product/268651" rel="noopener">Child seat and overtime terms</a>
+   <a href="https://www.tripool.app/en/articles/Chauffeured-Car-Price-List-en" rel="noopener">9-seater capacity and luggage</a>
+   <a href="https://www.goodcars.tw/en/blog/article/general/singaporean-taiwan-car-rental-guide" rel="noopener">Singapore licence and IDP</a>
+   <a href="https://www.expatfocus.com/taiwan/guide/taiwan-car-rental" rel="noopener">Car rental requirements</a></section>`;
+  return h;
+}
+
+const VIEWS={home:vHome,calendar:vCalendar,schedule:vSchedule,todo:vTodo,rides:vRides};
+function render(){
+  const v=(location.hash||"#home").slice(1);
+  view=VIEWS[v]?v:"home";
+  document.querySelectorAll("nav.tabs a").forEach(a=>{if(a.dataset.v===view)a.setAttribute("aria-current","page");else a.removeAttribute("aria-current")});
+  canWrite=canEdit();
+  const sy=!hasCreds()||unauth?'<span class="sync"><i></i>Not joined yet</span>':sync==="live"?'<span class="sync live"><i></i>Shared and up to date</span>':sync==="off"?'<span class="sync off"><i></i>Not connected</span>':'<span class="sync"><i></i>Connecting…</span>';
+  let top=`<header class="top"><div class="eyebrow">13–22 Dec 2026 · Kaohsiung and Taipei</div><h1>Taiwan Family Trip</h1><div class="row">${sy}${hasCreds()&&!unauth?`<button class="btn ghost" data-a="forget" style="padding:3px 10px;font-size:12px">${esc(ME.name)} · change</button>`:""}</div></header>`;
+  if(!SETUP_OK)top+=setupCard();
+  else if(!hasCreds()||unauth)top+=(unauth?'<div class="banner">That passcode was not accepted. Try again.</div>':"")+gateCard();
+  else if(sync==="off")top+='<div class="banner">Shared data is not reachable right now. Changes you make may not be saved. Reload to try again.</div>';
+  app.innerHTML=top+VIEWS[view]();
+}
+window.addEventListener("hashchange",()=>{window.scrollTo(0,0);render()});
+
+/* ---------- events ---------- */
+app.addEventListener("click",e=>{
+  const b=e.target.closest("[data-a]");if(!b)return;
+  const a=b.dataset.a,i=+b.dataset.i;
+  if(a==="forget"){try{localStorage.removeItem("tt_name");localStorage.removeItem("tt_pass")}catch(x){}ME.name="";ME.pass="";unauth=false;render()}
+  else if(a==="hprev"){homeDay=Math.max(0,homeDay-1);render()}
+  else if(a==="hnext"){homeDay=Math.min(10,homeDay+1);render()}
+  else if(a==="pick"){selDay=i;render()}
+  else if(a==="openday"){open.add(i);location.hash="#schedule";setTimeout(()=>{const el=document.querySelector('[data-a="toggle"][data-i="'+i+'"]');if(el)el.scrollIntoView({block:"start"})},60)}
+  else if(a==="toggle"){open.has(i)?open.delete(i):open.add(i);render()}
+  else if(a==="tmode"){tMode=b.dataset.m;render()}
+  else if(a==="pfilter"){pFilter=b.dataset.f;render()}
+  else if(a==="cycle"&&canWrite){const t=TASKS.find(x=>x.id===b.dataset.id),s=PSTAT[(PSTAT.indexOf(pstatus(t))+1)%3];save("pretrip",t.id,{status:s,by:ME.name||null})}
+  else if(a==="dtick"&&canWrite){const id=b.dataset.id,r=S.during[id];save("during",id,{done:!(r&&r.done),by:ME.name||null})}
+});
+app.addEventListener("change",e=>{
+  const el=e.target;
+  if(el.dataset.bk){const m=Object.assign({},S.bookings.main||{});m[el.dataset.bk]=el.value.trim();save("bookings","main",m)}
+  else if(el.dataset.cfg){const v=parseFloat(el.value);if(isFinite(v)&&v>=0){const m=Object.assign({},S.settings.main||{});m[el.dataset.cfg]=v;save("settings","main",m)}}
+  else if(el.dataset.day!=null){const k="d"+el.dataset.day,r=Object.assign({},S.days[k]||{});r[el.dataset.f]=el.value;r.by=ME.name||null;save("days",k,r)}
+});
+boot();
+})();
+</script>
+</body>
+</html>
